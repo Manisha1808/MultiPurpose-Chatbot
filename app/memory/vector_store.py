@@ -1,57 +1,94 @@
 import faiss
 import numpy as np
 
-from sentence_transformers import SentenceTransformer
-
-# Load embedding model
-embedding_model = SentenceTransformer(
-    "all-MiniLM-L6-v2"
+from sentence_transformers import (
+    SentenceTransformer
 )
 
-# FAISS index
+# FAISS setup
 dimension = 384
 
 index = faiss.IndexFlatL2(dimension)
 
-# Store actual conversations
 conversation_memory = []
+
+# Lazy model loading
+embedding_model = None
+
+
+def load_model():
+
+    global embedding_model
+
+    if embedding_model is None:
+
+        embedding_model = SentenceTransformer(
+            "all-MiniLM-L6-v2"
+        )
+
+    return embedding_model
+
 
 def store_memory(text):
 
-    # Convert text to embedding
-    embedding = embedding_model.encode([text])
+    try:
 
-    embedding = np.array(
-        embedding,
-        dtype=np.float32
-    )
+        model = load_model()
 
-    # Add embedding to FAISS
-    index.add(embedding)
+        embedding = model.encode([text])
 
-    # Save text memory
-    conversation_memory.append(text)
+        embedding = np.array(
+            embedding,
+            dtype=np.float32
+        )
+
+        index.add(embedding)
+
+        conversation_memory.append(text)
+
+    except Exception as e:
+
+        print("FAISS store error:", e)
+
 
 def search_memory(query):
 
-    # No memory yet
-    if len(conversation_memory) == 0:
+    try:
+
+        if len(conversation_memory) == 0:
+            return None
+
+        model = load_model()
+
+        query_embedding = model.encode([query])
+
+        query_embedding = np.array(
+            query_embedding,
+            dtype=np.float32
+        )
+
+        distances, indices = index.search(
+            query_embedding,
+            k=3
+        )
+
+        # Return best non-identical match
+        for idx in indices[0]:
+
+            matched_text = (
+                conversation_memory[idx]
+            )
+
+            if matched_text.lower().strip() != (
+                query.lower().strip()
+            ):
+
+                return matched_text
+
         return None
 
-    # Query embedding
-    query_embedding = embedding_model.encode([query])
+    except Exception as e:
 
-    query_embedding = np.array(
-        query_embedding,
-        dtype=np.float32
-    )
+        print("FAISS search error:", e)
 
-    # Search FAISS
-    distances, indices = index.search(
-        query_embedding,
-        k=1
-    )
-
-    matched_index = indices[0][0]
-
-    return conversation_memory[matched_index]
+        return None
