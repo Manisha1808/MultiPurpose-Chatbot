@@ -1,21 +1,18 @@
-# AI-Powered Personalized Multi-Session Chatbot with Intent Detection
+# AI-Powered Personalized Multi-Session Chatbot with Intent Detection and RAG-Based Semantic Memory
 
 ## Project Overview
 
-This project is an AI-powered personalized multi-session chatbot system developed using FastAPI, Streamlit, Machine Learning, and NLP techniques. The chatbot is capable of detecting user intent, maintaining contextual memory across multiple sessions, generating intelligent responses, creating images and files based on user requests, and storing user conversation history.
+This project is an AI-powered personalized multi-session chatbot system developed using FastAPI, Streamlit, Machine Learning, NLP, and Retrieval-Augmented Generation (RAG) concepts.
 
-The system supports personalized interactions by understanding user queries and preserving conversational continuity using database-backed session management.
+The chatbot is capable of:
+- Detecting user intent
+- Maintaining contextual memory across multiple sessions
+- Generating intelligent responses
+- Performing semantic search using FAISS vector database
+- Generating images and files
+- Preserving contextual continuity using vector embeddings and conversation history
 
-The chatbot can:
-
-* Detect user intent using Machine Learning
-* Handle multi-session conversations
-* Store and retrieve user chat history
-* Generate AI-based responses
-* Generate images based on prompts
-* Generate PDF and DOCX files
-* Provide an interactive frontend using Streamlit
-* Expose APIs using FastAPI
+The system supports personalized interactions by understanding user preferences, previous queries, semantic similarity, and conversational history.
 
 ---
 
@@ -26,42 +23,76 @@ The chatbot can:
 The chatbot uses a Machine Learning model to classify user queries into different intents.
 
 Supported intents:
-
-* Greeting
-* General Query
-* Image Generation
-* File Generation
-* Contextual Chat
-* Goodbye
+- Greeting
+- General Query
+- Image Generation
+- File Generation
+- Contextual Chat
+- Goodbye
 
 Machine Learning components used:
-
-* TF-IDF Vectorizer
-* Logistic Regression Classifier
+- TF-IDF Vectorizer
+- Logistic Regression Classifier
 
 ---
 
 ## 2. Multi-Session Memory
 
+The chatbot maintains contextual continuity across sessions using:
+- User IDs
+- Session IDs
+- SQLite conversation storage
+- Semantic retrieval memory
+
 The system stores:
-
-* User ID
-* Session ID
-* User Messages
-* Bot Responses
-* Conversation History
-
-SQLite database is used for persistent storage.
+- User messages
+- Bot responses
+- Session history
+- Contextual memory
 
 ---
 
-## 3. AI-Based Response Generation
+## 3. Semantic Search and RAG-Based Retrieval
 
-The chatbot integrates a HuggingFace Transformer model (GPT-2) to generate AI-powered conversational responses.
+The chatbot implements a lightweight Retrieval-Augmented Generation (RAG) pipeline.
+
+Workflow:
+
+```text
+User Query
+    ↓
+SentenceTransformer Embedding
+    ↓
+FAISS Vector Search
+    ↓
+Retrieve Relevant Memory
+    ↓
+Generate Context-Aware Response
+```
+
+The system uses:
+- SentenceTransformer embeddings
+- FAISS vector database
+- Semantic similarity search
+- Context-aware memory retrieval
+
+This enables:
+- Personalized conversations
+- Semantic contextual continuity
+- Intelligent memory retrieval
 
 ---
 
-## 4. Image Generation
+# 4. AI-Based Response Generation
+
+The chatbot generates AI responses using:
+- NLP-based response generation
+- Template-based intelligent responses
+- Semantic memory augmentation
+
+---
+
+# 5. Image Generation
 
 The chatbot can generate images based on user prompts.
 
@@ -73,13 +104,12 @@ Generated images are stored in:
 
 ---
 
-## 5. PDF and DOCX File Generation
+# 6. PDF and DOCX File Generation
 
 The chatbot can generate:
-
-* PDF Notes
-* Reports
-* DOCX Files
+- PDF Notes
+- Reports
+- DOCX Files
 
 Generated files are stored in:
 
@@ -89,56 +119,67 @@ Generated files are stored in:
 
 ---
 
-## 6. Frontend Interface
+# 7. Streamlit Frontend Interface
 
-A Streamlit frontend provides:
-
-* User-friendly chatbot interface
-* AI response display
-* Generated image display
-* PDF download functionality
+The Streamlit frontend provides:
+- Chat interface
+- User interaction
+- AI response rendering
+- Generated image display
+- PDF download support
+- Intent display
+- Multi-session interaction
 
 ---
 
-## 7. REST API Backend
+# 8. REST API Backend
 
 FastAPI is used to expose chatbot functionality through REST APIs.
+
+The backend handles:
+- Intent detection
+- AI response generation
+- Semantic retrieval
+- Database operations
+- Image generation
+- File generation
 
 ---
 
 # Technologies Used
 
 ## Backend
-
-* Python
-* FastAPI
-* Uvicorn
+- Python
+- FastAPI
+- Uvicorn
 
 ## Frontend
-
-* Streamlit
+- Streamlit
 
 ## Machine Learning / NLP
+- Scikit-learn
+- TF-IDF Vectorizer
+- Logistic Regression
+- SentenceTransformers
+- Transformers
+- NLP Techniques
 
-* Scikit-learn
-* Transformers
-* GPT-2
-* TF-IDF Vectorizer
-* Logistic Regression
+## Vector Database / RAG
+- FAISS
+- Semantic Search
+- Vector Embeddings
+- RAG-style Retrieval
 
 ## Database
-
-* SQLite
-* SQLAlchemy
+- SQLite
+- SQLAlchemy
 
 ## File Generation
-
-* ReportLab
-* python-docx
+- ReportLab
+- python-docx
 
 ## Image Generation
-
-* Pillow
+- Pillow
 
 ---
 
@@ -163,6 +204,7 @@ AI-Multi-Session-Chatbot/
 │   │   └── models.py
 │   │
 │   └── memory/
+│       └── vector_store.py
 │
 ├── frontend/
 │   └── app.py
@@ -179,6 +221,7 @@ AI-Multi-Session-Chatbot/
 │
 ├── requirements.txt
 ├── README.md
+├── .gitignore
 └── chatbot.db
 ```
 
@@ -188,14 +231,13 @@ AI-Multi-Session-Chatbot/
 
 A custom intent classification dataset was created for training the chatbot.
 
-Dataset includes user queries for:
-
-* Greetings
-* AI-related questions
-* File generation requests
-* Image generation requests
-* Contextual conversations
-* Goodbye messages
+Dataset categories include:
+- Greetings
+- AI-related queries
+- Image generation requests
+- File generation requests
+- Contextual conversations
+- Goodbye messages
 
 Dataset format:
 
@@ -232,17 +274,42 @@ Predicted Intent
 
 ---
 
+# Semantic Retrieval Pipeline
+
+The chatbot uses embedding-based semantic retrieval.
+
+Pipeline:
+
+```text
+Conversation Text
+      ↓
+SentenceTransformer Embedding
+      ↓
+FAISS Vector Index
+      ↓
+Semantic Similarity Search
+      ↓
+Relevant Memory Retrieval
+```
+
+This enables:
+- Context-aware conversations
+- Personalized responses
+- RAG-style memory augmentation
+
+---
+
 # Database Design
 
 ## Conversations Table
 
-| Column       | Description       |
-| ------------ | ----------------- |
-| id           | Primary Key       |
-| user_id      | User Identifier   |
-| session_id   | Unique Session ID |
-| user_message | User Query        |
-| bot_response | Chatbot Response  |
+| Column | Description |
+|---|---|
+| id | Primary Key |
+| user_id | User Identifier |
+| session_id | Unique Session ID |
+| user_message | User Query |
+| bot_response | Chatbot Response |
 
 ---
 
@@ -275,7 +342,7 @@ Request:
 ```json
 {
   "user_id": "manisha",
-  "message": "Explain machine learning"
+  "message": "Tell me about Artificial Intelligence"
 }
 ```
 
@@ -286,7 +353,7 @@ Response:
   "user_id": "manisha",
   "session_id": "uuid",
   "intent": "general_query",
-  "response": "Machine learning is a branch of AI..."
+  "response": "Artificial Intelligence (AI) is a branch of computer science..."
 }
 ```
 
@@ -374,13 +441,33 @@ http://localhost:8501
 
 # Usage Guidelines
 
-## General Chat
+## General AI Chat
 
 Example:
 
 ```text
-Explain machine learning
+Tell me about Artificial Intelligence
 ```
+
+---
+
+## Semantic Search / RAG Demo
+
+### First Query
+
+```text
+I love Artificial Intelligence
+```
+
+### Second Query
+
+```text
+Tell me about AI
+```
+
+Expected:
+- Semantic memory retrieval
+- Relevant contextual memory display
 
 ---
 
@@ -408,7 +495,7 @@ Example:
 generate AI notes pdf
 ```
 
-Generated file appears in frontend with download button.
+Generated file appears in frontend with download support.
 
 Files are stored in:
 
@@ -421,13 +508,14 @@ Files are stored in:
 # Frontend Features
 
 The Streamlit frontend supports:
-
-* User ID input
-* Chat interaction
-* AI response rendering
-* Image display
-* PDF download button
-* Intent display
+- User ID input
+- Chat interaction
+- AI response rendering
+- Image display
+- PDF download button
+- Intent display
+- Error handling
+- Multi-session interaction
 
 ---
 
@@ -440,9 +528,8 @@ python app/services/train_intent_model.py
 ```
 
 This generates:
-
-* intent_model.pkl
-* vectorizer.pkl
+- intent_model.pkl
+- vectorizer.pkl
 
 inside:
 
@@ -452,9 +539,7 @@ inside:
 
 ---
 
-# Deployment
-
-## GitHub Deployment
+# GitHub Deployment
 
 Push project to GitHub:
 
@@ -462,33 +547,18 @@ Push project to GitHub:
 git init
 git add .
 git commit -m "Initial commit"
-git remote add origin <repo_url>
+git branch -M main
+git remote add origin <repository_url>
 git push -u origin main
 ```
 
 ---
 
-## Suggested Deployment Platforms
+# Suggested Deployment Platforms
 
-* Render
-* Railway
-* Streamlit Cloud
-
----
-
-# Future Improvements
-
-Future enhancements can include:
-
-* FAISS Vector Database
-* Semantic Search
-* RAG Architecture
-* OpenAI API Integration
-* Authentication System
-* Voice Input
-* Emotion Detection
-* Conversation Summarization
-* Cloud Database Integration
+- Render
+- Railway
+- Streamlit Cloud
 
 ---
 
@@ -496,13 +566,34 @@ Future enhancements can include:
 
 During development, several challenges were encountered:
 
-* Python 3.13 compatibility issues with FAISS
-* HuggingFace dependency compatibility
-* Stable Diffusion model size limitations
-* GPT-2 noisy output formatting
-* Streamlit-FastAPI integration handling
+- Python 3.13 compatibility issues with FAISS
+- SentenceTransformer dependency handling
+- HuggingFace model loading issues
+- Stable Diffusion model size limitations
+- GPT-2 noisy response generation
+- Streamlit-FastAPI integration handling
+- Semantic retrieval optimization
 
-These were resolved using lightweight alternatives and optimized architecture.
+These were resolved using:
+- Lazy loading techniques
+- Error-safe FAISS integration
+- Lightweight semantic retrieval
+- Optimized frontend/backend architecture
+
+---
+
+# Future Improvements
+
+Future enhancements can include:
+- OpenAI API Integration
+- Authentication System
+- Voice Input
+- Emotion Detection
+- Cloud Database Integration
+- Conversation Summarization
+- Real-time Web Search
+- Advanced LLM Integration
+- Multi-user Authentication
 
 ---
 
@@ -510,15 +601,25 @@ These were resolved using lightweight alternatives and optimized architecture.
 
 The project successfully demonstrates:
 
-* AI-powered chatbot architecture
-* NLP-based intent detection
-* Personalized multi-session interaction
-* AI-generated responses
-* File and image generation
-* Database-backed memory handling
-* Full-stack AI application development
+- NLP-based intent detection
+- Personalized multi-session conversations
+- FAISS-based semantic retrieval
+- RAG-style contextual memory
+- AI-generated responses
+- Vector embedding search
+- Image generation
+- PDF and DOCX generation
+- Database-backed memory handling
+- Full-stack AI application development
 
-This project showcases practical implementation of conversational AI systems using modern Machine Learning and NLP technologies.
+The project integrates NLP, intent detection, semantic vector retrieval, and RAG-style memory augmentation to build an intelligent context-aware conversational AI system.
+
+This project showcases practical implementation of modern Generative AI concepts including:
+- Vector databases
+- Embedding-based retrieval
+- Semantic search
+- Retrieval-Augmented Generation (RAG)
+- Conversational AI systems
 
 ---
 
@@ -526,4 +627,4 @@ This project showcases practical implementation of conversational AI systems usi
 
 Developed as part of the assignment:
 
-"AI-Powered Personalized Multi-Session Chatbot with Intent Detection"
+AI-Powered Personalized Multi-Session Chatbot with Intent Detection
