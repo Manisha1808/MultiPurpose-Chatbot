@@ -1,0 +1,31 @@
+text,intent
+hello,greeting
+hi,greeting
+hey,greeting
+good morning,greeting
+good evening,greeting
+how are you,general_query
+what is AI,general_query
+explain machine learning,general_query
+tell me about python,general_query
+generate an image,image_generation
+create AI artwork,image_generation
+make futuristic city image,image_generation
+generate landscape image,image_generation
+create pdf,file_generation
+generate notes pdf,file_generation
+make report,file_generation
+create word document,file_generation
+continue previous chat,contextual_chat
+what did we discuss yesterday,contextual_chat
+show my previous conversation,contextual_chat
+bye,goodbye
+goodbye,goodbye
+see you later,goodbye
+thanks bye,goodbye
+
+generate pdf,file_generation
+create report,file_generation
+make notes,file_generation
+generate document,file_generation
+create docx,file_generation
